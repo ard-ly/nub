@@ -143,7 +143,7 @@ fixtures = [
                 "in",
                 [
                     "Asset-is_available",
-                    "Asset-asset_barcode",
+                    "Asset-barcode_serial_number",
                 ]
             ]
         ]
