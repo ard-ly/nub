@@ -14,7 +14,7 @@ def execute(filters=None):
 def get_data(filters):
 	conds = get_conditions(filters)
 	return frappe.db.sql("""
-		SELECT name as asset_id, asset_name, asset_category, location, is_available
+		SELECT name as asset_id, asset_name, asset_category, location, is_available,barcode_serial_number
 		FROM `tabAsset` 
 		{}
 	""".format(conds))
@@ -54,7 +54,14 @@ def get_columns():
 			'label': _("Asset Status"),
 			'fieldtype': "Check",
 			'width': 200
+		},
+		{
+			'fieldname': "barcode_serial_number",
+			'label': _("barcode"),
+			'fieldtype': "Barcode",
+			'width': 200
 		}
+		
 	]
 
 
@@ -77,7 +84,9 @@ def get_conditions(filters):
 		is_available = 1 if is_available=='Yes' else 0
 		conds.append(" is_available={}".format(is_available))
 	
-	
+	if filters.get('barcode_serial_number', False):
+		conds.append(" barcode_serial_number = '{}' ".format(filters.get('barcode_serial_number')))
+
 	if filters.get('from_date', False):
 		conds.append(" creation >= '{}' ".format(filters.get('from_date')))
 	
