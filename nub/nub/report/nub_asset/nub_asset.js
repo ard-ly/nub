@@ -49,10 +49,10 @@ frappe.query_reports["NUB Asset"] = {
 			options: ['', __('Yes'), __('No')]
 		},
 		{
-			fieldname: "barcode_serial_number",
-			label: __("Barcode Serial Number"),
-			fieldtype: "Barcode",
-		},
+			fieldname: "barcode",
+			label: __("Barcode"),
+			fieldtype: "Data"
+		}
 		
 	]
 };
