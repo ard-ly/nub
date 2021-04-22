@@ -13,11 +13,26 @@ def execute(filters=None):
 
 def get_data(filters):
 	conds = get_conditions(filters)
-	return frappe.db.sql("""
+	result = frappe.db.sql("""
 		SELECT name as asset_id, asset_name, asset_category, location, is_available, barcode
 		FROM `tabAsset` 
 		{}
 	""".format(conds))
+	if filters.get('barcode', False):
+		if result:
+			print(len(result[0]))
+			if len(result[0])==6:
+				if result[0][5] == filters.get('barcode', False):
+					if result[0][4] == 0:
+						doc = frappe.get_doc("Asset",result[0][0])
+						doc.db_set('is_available', 1)
+						row = list(result[0])
+						row[4] = 1
+						x = []
+						x.append(tuple(row))
+						result = tuple(x)
+						frappe.db.commit()
+	return result
 
 
 def get_columns():
