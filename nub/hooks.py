@@ -27,7 +27,7 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {"Asset" : "public/js/asset.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_list_js = {"Asset" : "public/js/asset_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -145,6 +145,18 @@ fixtures = [
                     "Asset-is_available",
                     "Asset-barcode_serial_number",
                     "Asset-barcode"
+                ]
+            ]
+        ]
+    },
+    {
+        "dt": "Print Format",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Asset Printer - Print Format"
                 ]
             ]
         ]
