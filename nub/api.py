@@ -8,20 +8,9 @@ from frappe.utils.print_format import read_multi_pdf
 from frappe.utils.print_format import download_pdf
 
 
-
-def check_asset_barcode(doc, method):
-    # if doc.barcode_serial_number and doc.barcode_serial_number != '':
-    #     doc.db_set('is_available', 1)
-    doc.barcode_serial_number = doc.barcode
-    frappe.db.set_value(doc.doctype, doc.name,
-                        "barcode_serial_number", doc.barcode)
-    frappe.db.commit()
-
-
 @frappe.whitelist()
 def download_multi_pdf(docnames):
     docnames = json.loads(docnames)
-    print_list = []
     new_doc = frappe.new_doc("Asset Printer")
     print_settings = frappe.get_doc('Print Settings', 'Print Settings')
     allow_print_for_draft = print_settings.allow_print_for_draft
