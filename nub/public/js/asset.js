@@ -1,16 +1,7 @@
-frappe.ui.form.on('Asset', {
-	setup(frm) {
-        console.log("setup");
-        $( "[data-fieldname='barcode_serial_number']" ).filter(":input" ).hide()
-	},
-	load(frm) {
-        console.log("load");
-
-        $( "[data-fieldname='barcode_serial_number']" ).filter(":input" ).hide()
-	},
-    refresh(frm) {
-        console.log("refresh");
-        $( "[data-fieldname='barcode_serial_number']" ).filter(":input" ).hide()
-	}
-
-})
+frappe.ui.form.on("Asset", {
+  barcode_serial_number(frm) {
+    let barcode_value = $("input[data-fieldname='barcode_serial_number']").val()
+    frm.set_value("barcode", barcode_value)
+    frm.refresh_field("barcode")
+  }
+});
