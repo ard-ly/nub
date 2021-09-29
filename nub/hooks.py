@@ -87,13 +87,7 @@ doctype_list_js = {"Asset" : "public/js/asset_list.js"}
 #	}
 # }
 
-doc_events = {
-	# "Asset": {
-	# 	# "on_submit": "nub.api.check_asset_barcode",
-	# 	# "on_update_after_submit": "nub.api.check_asset_barcode",
-	# 	# "on_update": "nub.api.check_asset_barcode"
-	# }
-}
+doc_events = {}
 
 # Scheduled Tasks
 # ---------------
