@@ -26,8 +26,8 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Asset" : "public/js/asset.js"}
-doctype_list_js = {"Asset" : "public/js/asset_list.js"}
+doctype_js = {"Asset": "public/js/asset.js"}
+doctype_list_js = {"Asset": "public/js/asset_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -79,15 +79,12 @@ doctype_list_js = {"Asset" : "public/js/asset_list.js"}
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
-
-doc_events = {}
+doc_events = {
+    "Asset Movement": {
+        "on_submit": "nub.api.set_asset_cost_center",
+        "on_cancel": "nub.api.reset_asset_cost_center"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
@@ -139,7 +136,9 @@ fixtures = [
                 [
                     "Asset-is_available",
                     "Asset-barcode_serial_number",
-                    "Asset-barcode"
+                    "Asset-barcode",
+                    "Asset Movement Item-cost_center",
+                    "Asset Movement Item-source_cost_center"
                 ]
             ]
         ]

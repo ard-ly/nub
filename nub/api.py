@@ -37,3 +37,24 @@ def download_multi_pdf(docnames):
     new_doc.save()
     frappe.db.commit()
     return {'name': new_doc.name}
+
+
+@frappe.whitelist()
+def set_asset_cost_center(doc, method):
+    for asset in doc.assets:
+        if asset.cost_center:
+            if frappe.db.exists("Asset", asset.asset):
+                ass_doc = frappe.get_doc("Asset", asset.asset)
+                if asset.cost_center != ass_doc.cost_center:
+                    cost_center = frappe.db.set_value("Asset", asset.asset, "cost_center", asset.cost_center)
+                    frappe.db.commit()
+
+
+
+@frappe.whitelist()
+def reset_asset_cost_center(doc, method):
+    for asset in doc.assets:
+        if asset.cost_center:
+            if frappe.db.exists("Asset", asset.asset):
+                prev_cost_center = frappe.db.set_value("Asset", asset.asset, "cost_center", asset.source_cost_center)
+                frappe.db.commit()
