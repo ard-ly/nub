@@ -4,3 +4,4 @@
 *.swp
 tags
 nub/docs/current
+nub/public/js/*.min.js*
