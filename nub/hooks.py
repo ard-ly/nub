@@ -16,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/nub/css/nub.css"
-# app_include_js = "/assets/nub/js/nub.js"
+app_include_js = "/assets/nub/js/custom_currency.min.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/nub/css/nub.css"
@@ -125,7 +125,7 @@ doc_events = {
 # override_doctype_dashboards = {
 # 	"Task": "nub.task.get_dashboard_data"
 # }
-
+extend_bootinfo = "nub.boot.boot_session"
 fixtures = [
     {
         "dt": "Custom Field",
@@ -138,7 +138,8 @@ fixtures = [
                     "Asset-barcode_serial_number",
                     "Asset-barcode",
                     "Asset Movement Item-cost_center",
-                    "Asset Movement Item-source_cost_center"
+                    "Asset Movement Item-source_cost_center",
+                    "System Settings-overwrite_currency_fraction"
                 ]
             ]
         ]

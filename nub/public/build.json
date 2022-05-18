@@ -1,0 +1,5 @@
+{
+    "nub/js/custom_currency.min.js": [
+        "public/js/formatter.js"
+    ]
+}
