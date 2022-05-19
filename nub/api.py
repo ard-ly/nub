@@ -44,12 +44,15 @@ def set_asset_cost_center(doc, method):
     for asset in doc.assets:
         if asset.cost_center:
             if frappe.db.exists("Asset", asset.asset):
-                ass_doc = frappe.get_doc("Asset", asset.asset)
-                if asset.cost_center != ass_doc.cost_center:
-                    cost_center = frappe.db.set_value("Asset", asset.asset, "cost_center", asset.cost_center)
+                asset_doc = frappe.get_doc("Asset", asset.asset)
+                if asset.cost_center != asset_doc.cost_center:
+                    asset_doc.db_set("cost_center", asset.cost_center)
+                    for row in asset_doc.schedules:
+                        if row.journal_entry:
+                            jv = frappe.get_doc('Journal Entry', row.journal_entry)
+                            for account in jv.accounts:
+                                account.db_set('cost_center', asset.cost_center)
                     frappe.db.commit()
-
-
 
 @frappe.whitelist()
 def reset_asset_cost_center(doc, method):
