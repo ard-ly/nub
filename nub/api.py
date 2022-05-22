@@ -68,8 +68,9 @@ def set_latest_cost_center_in_asset(doc, method):
 
         frappe.db.set_value("Asset", d.asset, "cost_center", current_cost_center)
 
+        asset = frappe.get_doc('Asset', d.asset)
         # update cost center in journals
-        for journal in doc.schedules:
+        for journal in asset.schedules:
             if journal.journal_entry:
                 journal = frappe.get_doc('Journal Entry', journal.journal_entry)
                 if journal.docstatus == 1:
