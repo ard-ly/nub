@@ -38,26 +38,40 @@ def download_multi_pdf(docnames):
     frappe.db.commit()
     return {'name': new_doc.name}
 
+def set_latest_cost_center_in_asset(doc, method):
+    current_cost_center = ""
+    cond = "1=1"
 
-@frappe.whitelist()
-def set_asset_cost_center(doc, method):
-    for asset in doc.assets:
-        if asset.cost_center:
-            if frappe.db.exists("Asset", asset.asset):
-                asset_doc = frappe.get_doc("Asset", asset.asset)
-                if asset.cost_center != asset_doc.cost_center:
-                    asset_doc.db_set("cost_center", asset.cost_center)
-                    for row in asset_doc.schedules:
-                        if row.journal_entry:
-                            jv = frappe.get_doc('Journal Entry', row.journal_entry)
-                            for account in jv.accounts:
-                                account.db_set('cost_center', asset.cost_center)
-                    frappe.db.commit()
+    for d in doc.assets:
+        args = {"asset": d.asset, "company": doc.company}
 
-@frappe.whitelist()
-def reset_asset_cost_center(doc, method):
-    for asset in doc.assets:
-        if asset.cost_center:
-            if frappe.db.exists("Asset", asset.asset):
-                prev_cost_center = frappe.db.set_value("Asset", asset.asset, "cost_center", asset.source_cost_center)
-                frappe.db.commit()
+        # latest entry corresponds to current document's cost_center when transaction date > previous dates
+        # In case of cancellation it corresponds to previous latest document's cost_center
+        latest_movement_entry = frappe.db.sql(
+            """
+            SELECT asm_item.cost_center
+            FROM `tabAsset Movement Item` asm_item, `tabAsset Movement` asm
+            WHERE
+                asm_item.parent=asm.name and
+                asm_item.asset=%(asset)s and
+                asm.company=%(company)s and
+                asm.docstatus=1 and {0}
+            ORDER BY
+                asm.transaction_date desc limit 1
+            """.format(
+                cond
+            ),
+            args,
+        )
+        if latest_movement_entry:
+            current_cost_center = latest_movement_entry[0][0]
+
+        frappe.db.set_value("Asset", d.asset, "cost_center", current_cost_center)
+
+        # update cost center in journals
+        for journal in doc.schedules:
+            if journal.journal_entry:
+                journal = frappe.get_doc('Journal Entry', journal.journal_entry)
+                if journal.docstatus == 1:
+                    for account in journal.accounts:
+                        rappe.db.set_value("Journal Entry Account", account.name, "cost_center", current_cost_center)

@@ -81,8 +81,8 @@ doctype_list_js = {"Asset": "public/js/asset_list.js"}
 
 doc_events = {
     "Asset Movement": {
-        "on_submit": "nub.api.set_asset_cost_center",
-        "on_cancel": "nub.api.reset_asset_cost_center"
+        "on_submit": "nub.api.set_latest_cost_center_in_asset",
+        "on_cancel": "nub.api.set_latest_cost_center_in_asset"
     }
 }
 
