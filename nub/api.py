@@ -65,7 +65,9 @@ def set_latest_cost_center_in_asset(doc, method):
         )
         if latest_movement_entry:
             current_cost_center = latest_movement_entry[0][0]
-
+        
+        if len(current_cost_center) <= 0: continue
+        
         frappe.db.set_value("Asset", d.asset, "cost_center", current_cost_center)
 
         asset = frappe.get_doc('Asset', d.asset)
