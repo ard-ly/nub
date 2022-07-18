@@ -39,7 +39,7 @@ def download_multi_pdf(docnames):
     return {'name': new_doc.name}
 
 def set_latest_cost_center_in_asset(doc, method):
-    current_cost_center = ""
+    current_cost_center = "gg"
     cond = "1=1"
 
     for d in doc.assets:
@@ -65,16 +65,15 @@ def set_latest_cost_center_in_asset(doc, method):
         )
         if latest_movement_entry:
             current_cost_center = latest_movement_entry[0][0]
-        
-        if len(current_cost_center) <= 0: continue
-        
-        frappe.db.set_value("Asset", d.asset, "cost_center", current_cost_center)
 
-        asset = frappe.get_doc('Asset', d.asset)
-        # update cost center in journals
-        for journal in asset.schedules:
-            if journal.journal_entry:
-                journal = frappe.get_doc('Journal Entry', journal.journal_entry)
-                if journal.docstatus == 1:
-                    for account in journal.accounts:
-                        frappe.db.set_value("Journal Entry Account", account.name, "cost_center", current_cost_center)
+        if current_cost_center:
+            frappe.db.set_value("Asset", d.asset, "cost_center", current_cost_center)
+
+            asset = frappe.get_doc('Asset', d.asset)
+            # update cost center in journals
+            for journal in asset.schedules:
+                if journal.journal_entry:
+                    journal = frappe.get_doc('Journal Entry', journal.journal_entry)
+                    if journal.docstatus == 1:
+                        for account in journal.accounts:
+                            frappe.db.set_value("Journal Entry Account", account.name, "cost_center", current_cost_center)
